@@ -1,0 +1,40 @@
+
+@media all and (min-width: 1281px) {
+	.homer {
+ 		width:600px;
+ 		height:600px;
+ 		background:url(homer.jpg) 0px 0px;
+	}
+}
+
+@media all and (max-width: 1280px) and (min-width: 1025px) {
+	.homer {
+ 		width:300px;
+ 		height:300px;
+ 		background:url(homer.jpg) 0px 0px;
+	}
+}
+
+@media all and (max-width: 1024px) and (min-width: 769px) {
+	.homer {
+ 		width:300px;
+ 		height:300px;
+ 		background:url(homer.jpg) 300px 0px;
+	}
+}
+
+@media all and (max-width: 768px) and (min-width: 481px) {
+	.homer {
+ 		width:300px;
+ 		height:300px;
+ 		background:url(homer.jpg) 0px -300px;
+	}
+}
+
+@media all and (max-width: 480px) {
+	.homer {
+ 		width:300px;
+ 		height:300px;
+ 		background:url(homer.jpg) 300px -300px;
+	}
+}
