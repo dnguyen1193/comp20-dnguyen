@@ -15,6 +15,15 @@
 
 <script>
 	// Complete this section and create a CSS file named style.css
+	var video = document.getElementById("music_video");
+	video.addEventListener('timeupdate', getLyrics, true);
+
+	function getLyrics(t){
+		var t = video.currentTime;
+		console.log(t);
+		document.getElementById("lyrics").innerHTML = "lyrics";
+	}
+
 </script>
 </body>
 </html>	
