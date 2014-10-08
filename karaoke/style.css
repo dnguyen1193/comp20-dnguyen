@@ -1,3 +1,19 @@
-#lyrics{
-	
+h1 {
+	font-family: Impact, Charcoal, sans-serif;
+	color: #484E55;
+	text-align: center;
+}
+body {
+	text-align: center;
+	background-color: #99CCFF;
+}
+
+#lyrics {
+	font-family: Tahoma, Geneva, sans-serif;
+	color: #484E55;
+}
+
+p {
+	margin: 0px 5px 5px 5px;
+	padding: 0px 0px 0px 0px;
 }
