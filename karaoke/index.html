@@ -14,14 +14,50 @@
 <div id="lyrics"></div>
 
 <script>
-	// Complete this section and create a CSS file named style.css
+	var lyrics = {
+		5: "Oh, I could hide 'neath the wings",
+		10: "Of the bluebird as she sings.",
+		14: "The six o'clock alarm would never ring.",
+		22: "But it rings and I rise,",
+		25: "Wipe the sleep out of my eyes.",
+		30: "My shavin' razor's cold and it stings.",
+		38: "Cheer up, Sleepy Jean.",
+		42: "Oh, what can it mean.",
+		44: "To a daydream believer",
+		48: "And a homecoming queen.",
+		55: "You once thought of me",
+		58: "As a white knight on a steed.",
+		62: "Now you know how happy I can be.",
+		68: "Oh, and our good times start and end",
+		72: "Without dollar one to spend.",
+		77: "But how much, baby, do we really need.",
+		85: "Cheer up, Sleepy Jean.",
+		88: "Oh, what can it mean.",
+		92: "To a daydream believer",
+		94: "And a homecoming queen.",
+		103: "Cheer up, Sleepy Jean.",
+		106: "Oh, what can it mean.",
+		109: "To a daydream believer",
+		112: "And a homecoming queen", 
+		120: "",
+		127: "Cheer up, Sleepy Jean.",
+		131: "Oh what can it mean.",
+		133: "To a daydream believer",
+		138: "And a homecoming queen",
+		145: "Cheer up, Sleepy Jean.",
+		149: "Oh what can it mean.",
+		151: "To a daydream believer",
+		155: "And a homecoming queen",
+		160: "[Fade and end]"
+	};
 	var video = document.getElementById("music_video");
 	video.addEventListener('timeupdate', getLyrics, true);
 
 	function getLyrics(t){
-		var t = video.currentTime;
-		console.log(t);
-		document.getElementById("lyrics").innerHTML = "lyrics";
+		var t = Math.floor(video.currentTime);
+		if (lyrics[t] != undefined) {
+			document.getElementById("lyrics").innerHTML = lyrics[t];
+		}
 	}
 
 </script>
