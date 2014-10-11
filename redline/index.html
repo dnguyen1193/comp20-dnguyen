@@ -1,12 +1,32 @@
 <!DOCTYPE html>
+<!--ASSIGNMENT DETAILS: 
+	Web page contains a Google Map using Google Maps JavaScript API - CHECK!
+		http://maps.google.com/maps/api/js?sensor=true
+	Requests data from the MBTA Red Line real-time API using XMLHttpRequest object
+		http://developer.mbta.com/lib/rthr/red.json
+	Parses the JSON data
+	Displays on map where Red Line trains currently are (using client side JavaScript)
+ -->
 <html>
-<head>
-	<meta charset="utf-8" />
-	<title>Where's the Train?</title>
-	<link rel="stylesheet" href="style.css" type="text/css" />
-</head>
+	<head>
+		<meta charset="utf-8" />
+		<title>Where's the Train?</title>
+		<link rel="stylesheet" href="style.css" type="text/css" />
+		<script src="http://maps.google.com/maps/api/js?sensor=true"
+				type="text/javascript"></script>
+		<script>
+			function initialize() {
+				var mapOptions = {
+					center: {lat: 42.3796, lng: -71.1203},
+					zoom: 15
+				};
+				var map = new google.maps.Map(document.getElementById("map_canvas"),
+							mapOptions);
+			}
+		</script>
+	</head>
 
-<body>
-	
-</body>
+	<body onload="initialize()">
+		<div id="map_canvas"></div>
+	</body>
 </html>
