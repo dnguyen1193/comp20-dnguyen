@@ -26,13 +26,16 @@
 				request.open("get", "http://developer.mbta.com/lib/rthr/red.json", true);
 				request.onreadystatechange = locateTrains;
 				request.send(null);
-			}
 
-			function locateTrains() {
+				function locateTrains() {
 				if (request.readyState == 4 && request.status == 200) {
 						data = request.responseText;
 						console.log(data);
 				}
+				xhr.send();
+			}
+
+			
 			}
 		</script>
 	</head>
