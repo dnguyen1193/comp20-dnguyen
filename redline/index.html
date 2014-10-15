@@ -28,14 +28,22 @@
 				request.send(null);
 
 				function locateTrains() {
-				if (request.readyState == 4 && request.status == 200) {
-						data = request.responseText;
-						console.log(data);
-				}
-				xhr.send();
-			}
+					if (request.readyState == 4 && request.status == 200) {
+							/* parses data - I think? */
+							data = JSON.parse(request.responseText);
+							/* gets data from the JSON object */
+							for (i = 1; i < data.TripList.Trips.length; i++) {
+								templat = data.TripList.Trips[i].Position.Lat;
+								templong = data.TripList.Trips[i].Position.Long;
 
-			
+								var marker = new google.maps.Marker({
+									position: {lat: templat, lng: templong},
+									title: "Train " + i
+								});
+							marker.setMap(map);
+							}
+					}
+				}
 			}
 		</script>
 	</head>
