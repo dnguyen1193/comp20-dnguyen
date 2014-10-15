@@ -2,7 +2,7 @@
 <!--ASSIGNMENT DETAILS: 
 	Web page contains a Google Map using Google Maps JavaScript API - CHECK!
 		http://maps.google.com/maps/api/js?sensor=true
-	Requests data from the MBTA Red Line real-time API using XMLHttpRequest object
+	Requests data from the MBTA Red Line real-time API using XMLHttpRequest object - CHECK!
 		http://developer.mbta.com/lib/rthr/red.json
 	Parses the JSON data
 	Displays on map where Red Line trains currently are (using client side JavaScript)
@@ -22,6 +22,17 @@
 				};
 				var map = new google.maps.Map(document.getElementById("map_canvas"),
 							mapOptions);
+				var request = new XMLHttpRequest();
+				request.open("get", "http://developer.mbta.com/lib/rthr/red.json", true);
+				request.onreadystatechange = locateTrains;
+				request.send(null);
+			}
+
+			function locateTrains() {
+				if (request.readyState == 4 && request.status == 200) {
+						data = request.responseText;
+						console.log(data);
+				}
 			}
 		</script>
 	</head>
