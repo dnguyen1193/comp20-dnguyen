@@ -34,6 +34,8 @@
 				console.log(currLng);
 				console.log(currLat);
 				getCurrentLocation();
+				console.log(currLat);
+				console.log(currLng);
 
 				var mapOptions = {
 					center: {lat: currLat, lng: currLng}, //get current location?
@@ -56,9 +58,7 @@
 			function showPosition(position) {
 				console.log("showPos");
 				currLat = position.coords.latitude;
-				currLat = position.coords.longitude;
-				console.log(currLat);
-				console.log(currLng);
+				currLng = position.coords.longitude;
 			}
 
 		</script>
