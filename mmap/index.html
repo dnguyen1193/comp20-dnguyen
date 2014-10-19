@@ -28,40 +28,31 @@
 		<script src="http://maps.google.com/maps/api/js?sensor=true"
 				type="text/javascript"></script>
 		<script>
-			currLat = 0;
-			currLng = 0;
-			function initialize() {
-				console.log("initalize1" + currLat + " " + currLng);
-				getCurrentLocation();
-				console.log("initalize2" + currLat + " " + currLng);
+			var myLat = 0;
+			var myLng = 0;
+			
+			function getLocation() {
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(makeMap);
+				} else {
+					alert("Geolocation is not supported by this browser.");
+				}
+			}
 
+			function makeMap(position) {
+				currLat = position.coords.latitude;
+				currLng = position.coords.longitude;
 				var mapOptions = {
-					center: {lat: currLat, lng: currLng}, //get current location?
+					center: {lat: currLat, lng: currLng},
 					zoom: 15
 				};
 				var map = new google.maps.Map(document.getElementById("map_canvas"),
 							mapOptions);
 			}
 
-			function getCurrentLocation() {
-				if (navigator.geolocation) {
-					navigator.geolocation.getCurrentPosition(showPosition);
-					console.log("getCurrLoc" + currLat + " " + currLng);
-					console.log(currLng);
-				} else {
-					alert("Geolocation is not supported by this browser.");
-				}
-			}
-
-			function showPosition(position) {
-				currLat = position.coords.latitude;
-				currLng = position.coords.longitude;
-				console.log("showPos" + currLat + " " + currLng);
-			}
-
 		</script>
 
-	<body onload="initialize()">
+	<body onload="getLocation()">
 		<div id="map_canvas"></div>
 	</body>
 
