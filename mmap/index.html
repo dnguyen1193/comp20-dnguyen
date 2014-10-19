@@ -47,14 +47,14 @@
 					console.log("getCurr:if");
 					navigator.geolocation.getCurrentPosition(showPosition);
 				} else {
-					alert("Gelocation is not supported by this browser.");
+					alert("Geolocation is not supported by this browser.");
 				}
 			}
 
 			function showPosition(position) {
 				console.log("showPos");
-				var currLat = position.coords.latitude;
-				var currLng = position.coords.longitude;
+				currLat = position.coords.latitude;
+				currLng = position.coords.longitude;
 			}
 
 		</script>
