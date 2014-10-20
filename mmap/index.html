@@ -8,7 +8,7 @@
 	REQUIREMENTS
 	- At least 1 CSS file (named whatever) - CHECK
 	- navigator.geolocation object must be used to retrieve my geolocation info - CHECK
-	- Display my location on map with a unique marker (image of choice)
+	- Display my location on map with a unique marker (image of choice) - CHECK
 	- Display info window after retrieving information from navigator.geolocation
 	- Display locations of students on map (no unique map marker needed)
 		- Display info window showing (name, latitude, longitude, timestamp)
@@ -58,6 +58,14 @@
 					position: {lat: latitude, lng: longitude},
 					map: map,
 					icon: image
+					title: "PinkiePie"
+				});
+				var windowContent = latitude + " " + longitude;
+				var myWindow = 	new google.maps.InfoWindow({
+					content:windowContent
+				});
+				google.maps.event.addListener(marker, 'click', openWindow(){
+					myWindow.open(map, marker);
 				});
 			}
 
