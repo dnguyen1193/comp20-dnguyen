@@ -83,7 +83,10 @@
 				request.send(parameters);
 
 				function getStudents() {
-					console.log("in getStudents");
+					if (request.readyState == 4 && request.status == 200) {
+						console.log("in getStudents");
+						data = JSON.parse(request.responseText);
+					}
 				}
 			}
 
