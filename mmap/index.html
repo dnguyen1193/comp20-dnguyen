@@ -48,6 +48,17 @@
 				};
 				var map = new google.maps.Map(document.getElementById("map_canvas"),
 							mapOptions);
+
+				addMyMarker(map, currLat, currLng);
+			}
+
+			function addMyMarker(map, latitude, longitude) {
+				var image = "images/pinkiepie.jpeg";
+				var marker = new google.maps.Marker({
+					position: {lat: latitude, lng: longitude},
+					map: map,
+					icon: image;
+				});
 			}
 
 		</script>
