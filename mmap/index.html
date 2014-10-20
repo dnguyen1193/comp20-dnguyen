@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- TO DO:
-	Retrieve current location and send current location to Ming's datastore
+	Retrieve current location and send current location to Ming's datastore - CHECK
 	Retrieve/display locations of characters and locations of students in the class
 		Last 100 entry, including my own
 	Distance (in miles) between me and each student needs to be displayed (below the map or as an overlay on the map)
@@ -14,7 +14,7 @@
 		- Display info window showing (name, latitude, longitude, timestamp)
 	- Display location of characters w/ respective icon as the marker
 		- Display info window showing (name, latitude, longitude, note)
-		- Download each character's icon image
+		- Download each character's icon image - CHECK
 	- Display polyline(s) between me and each character on map
 	- Display distance (in miles) between me and characters
 		- SORTED.
@@ -79,14 +79,34 @@
 				var request = new XMLHttpRequest();
 				request.open("POST", url, true);
 				request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				request.onreadystatechange = getStudents;
-				console.log(parameters);
+				request.onreadystatechange = getData;
 				request.send(parameters);
 
-				function getStudents() {
+				function getData() {
 					if (request.readyState == 4 && request.status == 200) {
-						console.log("in getStudents");
 						data = JSON.parse(request.responseText);
+						displayStudents(map, data.students);
+					}
+				}
+
+				function displayStudents(map, students) {
+					for (i = 0; i < students.length; i++) {
+						var marker = new google.maps.Marker({
+							position: {lat: students[i].lat, lng: students[i].lng},
+						})
+
+						marker.setMap(map);
+						
+						var studentWindowCont = "<p>student[i].login</p>" 
+											+ "<p>student[i].lat, student[i].lng</p>"
+											+ "<p>student[i].created_at</p>"
+						var studentWindow = new google.maps.InfoWindow({
+							content: studentWindowCont
+						});
+						google.maps.event.addListener(marker, "click", openWindow);
+						function openWindow() {
+							studentWindow.open(map, marker);
+						}
 					}
 				}
 			}
