@@ -40,8 +40,8 @@
 			}
 
 			function makeMap(position) {
-				currLat = position.coords.latitude;
-				currLng = position.coords.longitude;
+				var currLat = position.coords.latitude;
+				var currLng = position.coords.longitude;
 				var mapOptions = {
 					center: {lat: currLat, lng: currLng},
 					zoom: 15
@@ -64,9 +64,10 @@
 				var myWindow = 	new google.maps.InfoWindow({
 					content: windowContent
 				});
-				google.maps.event.addListener(marker, "click", openWindow() {
+				google.maps.event.addListener(marker, "click", openWindow);
+				function openWindow() {
 					myWindow.open(map, marker);
-				});
+				}
 			}
 
 		</script>
