@@ -15,7 +15,7 @@
 	- Display location of characters w/ respective icon as the marker - CHECK
 		- Display info window showing (name, latitude, longitude, note) - CHECK
 		- Download each character's icon image - CHECK
-	- Display polyline(s) between me and each character on map
+	- Display polyline(s) between me and each character on map - CHECK
 	- Display distance (in miles) between me and characters
 		- SORTED.
 
@@ -127,10 +127,15 @@
 						"snape": "images/snape.png",
 						"waldo": "images/waldo.png"
 					};
+					var distances;
 					for (i = 0; i < characters.length; i++) {
 						var character = characters[i];
 						getCharData(map, character, charMarkers[character.name]);
 						createPolyline(map, character, myLat, myLng);
+						distances = getCharDistance(character, myLat,
+													myLng, i, distances);
+						distances = sortDistances(distances);
+						printDistances(distances);
 					}
 
 					function getCharData(map, character, charMarker) {
@@ -175,6 +180,53 @@
 						line.setMap(map);
 					}
 
+					function getCharDistance(character, lat1, lng1, key, distances) {
+						Number.prototype.toRad = function() {
+							return this * Math.PI / 180;
+						}
+						var RAD = 3959; /* radius of Earth in miles */
+						var lat2 = character.loc.latitude;
+						var lng2 = character.loc.longitude;
+						var dLat = lat2 - lat1;
+						var dLng = lng2 - lng1;
+						var rLat = dLat.toRad();
+						var rLng = dLng.toRad();
+						var rLat1 = lat1.toRad();
+						var rLat2 = lat2.toRad();
+						var a = Math.sin(rLat / 2) * Math.sin(rLat / 2) +
+								Math.cos(rLat1) * Math.cos(rLat2) *
+								Math.sin(rLng / 2) * Math.sin(rLng / 2);
+						var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+						var d = R * c;
+						var elem = {"name": character.name, "distance": d};
+						distances[key] = elem;
+						return distances;
+					}
+
+					function sortDistances(distances) {
+						for (var i = 0; i < distances.length; i++) {
+							for (var j = i + 1; j < distances.length; j++) {
+								if (distances[j].distance < distances[i].distance) {
+									var temp = distances[i];
+									distances[i] = distances[j];
+									distances[j] = temp;
+								}
+							}
+						}
+						return distances;
+					}
+
+					function printDistances(distances) {
+						var allDist = "<h3>Distances from PinkiePie</h3>";
+						for (var i = 0; i < distances.length; i++) {
+							if (distances[i].name != undefined) {
+								allDist = allDist + "<p>" + distances[i].name
+									  + ": " + distances[i].distance + "</p>";
+							}
+						}
+						document.getElementById("distances").innerHTML = allDist;
+					}
+
 
 				}
 			}
@@ -183,6 +235,7 @@
 
 	<body onload="getLocation()">
 		<div id="map_canvas"></div>
+		<div id ="distances"></div>
 	</body>
 
 
