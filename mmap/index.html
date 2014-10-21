@@ -91,16 +91,19 @@
 
 				function displayStudents(map, students) {
 					for (i = 0; i < students.length; i++) {
+						getStudData(map, students[i]);
+					}
+
+					function getStudData(map, student) {
 						var studLogin = students[i].login;
 						var studLat = students[i].lat;
 						var studLng = students[i].lng;
 						var studTimestamp = students[i].created_at;
 						var marker = new google.maps.Marker({
-							position: {lat: students[i].lat, lng: students[i].lng},
+							position: {lat: studLat, lng: studLng},
 						})
 
 						marker.setMap(map);
-						
 						var studentWindowCont = "<p>" + studLogin + "</p>" 
 											+ "<p>" + studLat + ", " + studLng + "</p>"
 											+ "<p>" + studTimestamp + "</p>";
@@ -109,8 +112,8 @@
 						});
 						google.maps.event.addListener(marker, "click", openWindow);
 						function openWindow() {
-							studentWindow.open(map, marker);
-						}
+							studentWindow.open(map, this);
+						}		
 					}
 				}
 			}
