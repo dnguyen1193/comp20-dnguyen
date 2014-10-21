@@ -224,8 +224,10 @@
 									  + ": " + distances[i].distance + " miles</p>";
 							}
 						}
-						document.getElementById("distances").innerHTML = allDist;
-						map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(distances);
+						
+						var charDistances = document.getElementById("distances");
+						charDistances.innerHTML = allDist;
+						map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(charDistances);
 					}
 
 
