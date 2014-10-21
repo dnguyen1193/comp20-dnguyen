@@ -16,6 +16,7 @@
 					navigator.geolocation.getCurrentPosition(makeMap);
 				} else {
 					alert("Geolocation is not supported by this browser.");
+					makeMapWithoutGeolocation;
 				}
 			}
 
@@ -30,6 +31,19 @@
 							mapOptions);
 
 				addMyMarker(map, currLat, currLng);
+				sendRequest(map, currLat, currLng);
+			}
+
+			function makeMapWithoutGeolocation() {
+				var emptyLat = 0.0;
+				var emptyLnh = 0.0;
+				var mapOptions = {
+					center: {lat: emptyLat, lng: emptyLng},
+					zoom: 15
+				};
+				var map = new google.maps.Map(document.getElementById("map_canvas"),
+							mapOptions);
+
 				sendRequest(map, currLat, currLng);
 			}
 
@@ -212,8 +226,6 @@
 						charDistances.innerHTML = allDist;
 						map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(charDistances);
 					}
-
-
 				}
 			}
 
