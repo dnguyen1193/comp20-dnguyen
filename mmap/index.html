@@ -197,7 +197,7 @@
 								Math.cos(rLat1) * Math.cos(rLat2) *
 								Math.sin(rLng / 2) * Math.sin(rLng / 2);
 						var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-						var d = R * c;
+						var d = RAD * c;
 						var elem = {"name": character.name, "distance": d};
 						distances[key] = elem;
 						return distances;
