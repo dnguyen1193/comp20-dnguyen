@@ -2,7 +2,7 @@
 <!-- TO DO:
 	Retrieve current location and send current location to Ming's datastore - CHECK
 	Retrieve/display locations of characters and locations of students in the class
-		Last 100 entry, including my own
+		Last 100 entry, including my own - CHECK
 	Distance (in miles) between me and each student needs to be displayed (below the map or as an overlay on the map)
 
 	REQUIREMENTS
@@ -10,8 +10,8 @@
 	- navigator.geolocation object must be used to retrieve my geolocation info - CHECK
 	- Display my location on map with a unique marker (image of choice) - CHECK
 	- Display info window after retrieving information from navigator.geolocation - CHECK
-	- Display locations of students on map (no unique map marker needed)
-		- Display info window showing (name, latitude, longitude, timestamp)
+	- Display locations of students on map (no unique map marker needed) - CHECK
+		- Display info window showing (name, latitude, longitude, timestamp) - CHECK
 	- Display location of characters w/ respective icon as the marker
 		- Display info window showing (name, latitude, longitude, note)
 		- Download each character's icon image - CHECK
@@ -86,6 +86,7 @@
 					if (request.readyState == 4 && request.status == 200) {
 						data = JSON.parse(request.responseText);
 						displayStudents(map, data.students);
+						displayCharacters(map, data.characters);
 					}
 				}
 
@@ -100,8 +101,8 @@
 						var studLng = students[i].lng;
 						var studTimestamp = students[i].created_at;
 						var marker = new google.maps.Marker({
-							position: {lat: studLat, lng: studLng},
-						})
+							position: {lat: studLat, lng: studLng}
+						});
 
 						marker.setMap(map);
 						var studentWindowCont = "<p>" + studLogin + "</p>" 
@@ -115,6 +116,49 @@
 							studentWindow.open(map, this);
 						}		
 					}
+				}
+
+				function displayCharacters(map, characters) {
+					var charMarkers = {
+						"batman": "batman.png",
+						"carmen": "carmen.png",
+						"hescott": "hescott.png",
+						"nr": "nr.png",
+						"snape": "snape.png",
+						"waldo": "waldo.png"
+					};
+					for (i = 0; i < characters.length; i++) {
+						var character = characters[i];
+						getCharData(map, character, charMarkers[character]);
+					}
+
+					function getCharData(map, character, charMarker) {
+						var charName = character.name;
+						var charLat = character.loc.latitude;
+						var charLng = character.loc.longitude;
+						var charNote = character.loc.note;
+						var charIcon = charMarker;
+						
+						var marker = new google.maps.Marker({
+							position: {lat: charLat, lng: charLng},
+							map: map,
+							image: charIcon
+						});
+
+						marker.setMap(map);
+						var charWindowCont = "<p>" + charName + "</p>" 
+											+ "<p>" + charLat + ", " + charLng + "</p>"
+											+ "<p>" + charNote + "</p>";
+						var charWindow = new google.maps.InfoWindow({
+							content: charWindowCont
+						});
+						google.maps.event.addListener(marker, "click", openWindow);
+						function openWindow() {
+							charWindow.open(map, this);
+						}	
+					}
+
+
 				}
 			}
 
