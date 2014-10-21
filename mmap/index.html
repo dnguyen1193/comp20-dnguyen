@@ -129,8 +129,7 @@
 					};
 					for (i = 0; i < characters.length; i++) {
 						var character = characters[i];
-						getCharData(map, character, charMarkers[character]);
-						console.log("CharMarkers data: " + charMarkers[character]);
+						getCharData(map, character, charMarkers[character.name]);
 					}
 
 					function getCharData(map, character, charMarker) {
