@@ -1,25 +1,5 @@
 <!DOCTYPE html>
-<!-- TO DO:
-	Retrieve current location and send current location to Ming's datastore - CHECK
-	Retrieve/display locations of characters and locations of students in the class
-		Last 100 entry, including my own - CHECK
-	Distance (in miles) between me and each student needs to be displayed (below the map or as an overlay on the map)
 
-	REQUIREMENTS
-	- At least 1 CSS file (named whatever) - CHECK
-	- navigator.geolocation object must be used to retrieve my geolocation info - CHECK
-	- Display my location on map with a unique marker (image of choice) - CHECK
-	- Display info window after retrieving information from navigator.geolocation - CHECK
-	- Display locations of students on map (no unique map marker needed) - CHECK
-		- Display info window showing (name, latitude, longitude, timestamp) - CHECK
-	- Display location of characters w/ respective icon as the marker - CHECK
-		- Display info window showing (name, latitude, longitude, note) - CHECK
-		- Download each character's icon image - CHECK
-	- Display polyline(s) between me and each character on map - CHECK
-	- Display distance (in miles) between me and characters
-		- SORTED.
-
--->
 <html>
 	<head>
 		<meta charset="utf-8" />
@@ -129,13 +109,16 @@
 					};
 					var distances = [];
 					for (i = 0; i < characters.length; i++) {
-						var character = characters[i];
-						getCharData(map, character, charMarkers[character.name]);
-						createPolyline(map, character, myLat, myLng);
-						distances = getCharDistance(character, myLat,
+						if (characters[i] != undefined) {
+							var character = characters[i];
+							getCharData(map, character, charMarkers[character.name]);
+							createPolyline(map, character, myLat, myLng);
+							distances = getCharDistance(character, myLat,
 													myLng, i, distances);
-						distances = sortDistances(distances);
-						printDistances(distances);
+							distances = sortDistances(distances);
+							printDistances(distances);
+						}
+						
 					}
 
 					function getCharData(map, character, charMarker) {
@@ -240,6 +223,5 @@
 		<div id="map_canvas"></div>
 		<div id ="distances"></div>
 	</body>
-
 
 </html>
