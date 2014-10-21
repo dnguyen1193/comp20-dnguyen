@@ -12,8 +12,8 @@
 	- Display info window after retrieving information from navigator.geolocation - CHECK
 	- Display locations of students on map (no unique map marker needed) - CHECK
 		- Display info window showing (name, latitude, longitude, timestamp) - CHECK
-	- Display location of characters w/ respective icon as the marker
-		- Display info window showing (name, latitude, longitude, note)
+	- Display location of characters w/ respective icon as the marker - CHECK
+		- Display info window showing (name, latitude, longitude, note) - CHECK
 		- Download each character's icon image - CHECK
 	- Display polyline(s) between me and each character on map
 	- Display distance (in miles) between me and characters
@@ -86,7 +86,7 @@
 					if (request.readyState == 4 && request.status == 200) {
 						data = JSON.parse(request.responseText);
 						displayStudents(map, data.students);
-						displayCharacters(map, data.characters);
+						displayCharacters(map, data.characters, latitude, longitude);
 					}
 				}
 
@@ -118,7 +118,7 @@
 					}
 				}
 
-				function displayCharacters(map, characters) {
+				function displayCharacters(map, characters, myLat, myLng) {
 					var charMarkers = {
 						"batman": "images/batman.png",
 						"carmen": "images/carmen.png",
@@ -130,6 +130,7 @@
 					for (i = 0; i < characters.length; i++) {
 						var character = characters[i];
 						getCharData(map, character, charMarkers[character.name]);
+						createPolyline(map, character, myLat, myLng);
 					}
 
 					function getCharData(map, character, charMarker) {
@@ -156,6 +157,22 @@
 						function openWindow() {
 							charWindow.open(map, this);
 						}	
+					}
+
+					function createPolyline (map, character, myLat, myLng) {
+						var coordinates = [
+							new google.maps.LatLng(character.loc.latitude,
+												   character.loc.longitude),
+							new google.maps.LatLng(myLat, myLng)
+						];
+						var line = new google.maps.Polyline({
+							path: coordinates,
+							geodesic: true,
+							strokeColor: '#FFFFFF',
+							strokeOpacity: 1.0,
+							strokeWeight: 2
+						})
+						line.setMap(map);
 					}
 
 
