@@ -130,6 +130,7 @@
 					for (i = 0; i < characters.length; i++) {
 						var character = characters[i];
 						getCharData(map, character, charMarkers[character]);
+						console.log("CharMarkers data: " + charMarkers[character]);
 					}
 
 					function getCharData(map, character, charMarker) {
@@ -138,7 +139,6 @@
 						var charLng = character.loc.longitude;
 						var charNote = character.loc.note;
 						var charIcon = charMarker;
-						console.log(charIcon);
 						
 						var marker = new google.maps.Marker({
 							position: {lat: charLat, lng: charLng},
