@@ -91,15 +91,19 @@
 
 				function displayStudents(map, students) {
 					for (i = 0; i < students.length; i++) {
+						var studLogin = students[i].login;
+						var studLat = students[i].lat;
+						var studLng = students[i].lng;
+						var studTimestamp = students[i].created_at;
 						var marker = new google.maps.Marker({
 							position: {lat: students[i].lat, lng: students[i].lng},
 						})
 
 						marker.setMap(map);
 						
-						var studentWindowCont = "<p>student[i].login</p>" 
-											+ "<p>student[i].lat, student[i].lng</p>"
-											+ "<p>student[i].created_at</p>"
+						var studentWindowCont = "<p>studLogin</p>" 
+											+ "<p>studLat " + "," + "studLng</p>"
+											+ "<p>studTimestamp</p>"
 						var studentWindow = new google.maps.InfoWindow({
 							content: studentWindowCont
 						});
