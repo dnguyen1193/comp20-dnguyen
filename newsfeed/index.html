@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 
 <html>
-
 <head>
 	<title>My News Feed</title>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script>
-	  // Most of your work will be done here...
+		function reload() {
+			var news = document.getElementById("news");
+			$(news).html("");
+			$.each(localStorage, function(key) {
+				$(news).prepend("<p>" + key + " - " + localStorage[key] + "</p>");
+			});
+		}
+
+		function store() {
+			var news = document.getElementById("news");
+			var newTimestamp = new Date();
+			var newUpdate = document.getElementById("msg").value;
+	 		localStorage[newTimestamp] = newUpdate;
+	 		$(news).prepend("<p>" + newTimestamp + " - " + newUpdate + "</p>");
+	 	}
 	</script>
 </head>
 
-<body>
+<body onload="reload()">
 	<h1>My News Feed</h1>
-	<h3>My news update: <input type="text" id="msg" name="msg" size="30" /></h3>
+	<h3>My news update: <input type="text" id="msg" name="msg" size="30" onchange="store()"/></h3>
 	<div id="news">News...</div>
 </body>
 </html>
