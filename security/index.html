@@ -7,6 +7,7 @@
 	<body>
 		<h2>Security Assessment</h2>
 		<h3>Introduction</h3>
+		<p>This assessment tests the security of the "Where in the World" web application developed by Jeremy Goldman. The web application provides 3 APIs to its client: a POST API that stores the login, location (latitude and longitude), and timestamp of clients in its database. Any client who uses it sends their login and location to the database, and if sent successfully, will receive data from the last 100 database accesses; a GET API that allows a client to search through check-ins by login; and another GET API that returns a copy of MBTA's red line JSON data. Vulnerabilities that I've found in the current application implementation were tested and documented below.</p>
 		<h3>Methodology</h3>
 		<h3>Abstract of Findings</h3>
 		<h3>Issues Found</h3>
