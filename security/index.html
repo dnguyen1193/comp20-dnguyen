@@ -27,7 +27,7 @@
 					</li>
 				</ul>
 			</li>
-			<li>SQL Injection</li>
+			<li>SQL Injection
 				<ul>
 					<li>In the get API locations.json, clients are able to search through the database for a certain login, retrieving the past 100 login data of that specific login. A SQL injection allows the user to query and retrieve information from the database regardless of login information.</li>
 					<li>Severity: HIGH. This vulnerability exposes the server's clients simply because the client has used the server and logged in at some point in time. Without a SQL injection, as shown below, clients are able only to access data with their login:
@@ -36,8 +36,8 @@
 						<p><img src="./images/hack2b.png" alt="SQL injection query"/></p>
 						Data can also be modified by the attacker using a SQL injection.</li>
 					<li>Filtering the query input for characters that are often used in a SQL injection will help protect the server from this vulnerability. In the example above, screening for [$ne] would have prevented the attacker from getting all the data. Screening for semicolons (;) and single quotes (') will further prevent this vulnerability.</li>
-				</ul>
-			<li>Manual Data Entry</li>
+				</ul></li>
+			<li>Manual Data Entry
 				<ul>
 					<li>Using curl, data can be input into the database store to retrieve information in the database. Of course, this is how any database works - you WANT to store information in the database. But do you want fake data, too? Currently, clients can manually type in their login and locations to get into the database. But how do we know whether that's their actual location?</li>
 					<li>Severity: Medium. The database expects a login, latitude, and longitude. Common sense tells us that the latitude and longitude should be numbers only, but this web application does not currently check for that. Additionally, an attacker's location can be faked, since they manually input their data.
@@ -45,8 +45,8 @@
 					If server manager's were trying to track down their clients for whatever reason, the fake data could throw them off. The input for janedoe123 says she's in Hawaii. But she's probably not actually there. And how is it that some latitudes and longitudes are strings? These will not break the database or compromise the security of other client's necessarily, but if the web application's database is being used in another program, incorrect input could easily break the program, causing a risk there.
 					</li>
 					<li>Validating the input is one way to check that only data with correct login, latitude, and longitude values are added to the database, tossing out any locations listed as strings and excluding them from the database. Additionally, rather than having clients manually input their locations, using a geolocator to track their location from the backend will prevent fake data from being put into the database.</li>
-				</ul>
-			<li>Cross Origin Restrictions</li>
+				</ul></li>
+			<li>Cross Origin Restrictions
 				<ul>
 					<li>Cross origin restrictions are the norm with HTML and JavaScript - if the user is not using the same domain, he/she cannot access the site as a security measure. However, cross origin resource sharing can be enabled from the server side. Opening your domain to too many other domains, however, creates a vulnerability in the server.</li>
 					<li>Severity: HIGH. Allowing the server to be accessed from any domain creates a large vulnerability to all clients using the database, as it means that anyone on any domain - including all attackers, can access their data, compromising the confidentiality of information of all users.
@@ -54,7 +54,7 @@
 					As seen in the code above, the server does enable access from any domain. The login information itself may not be super sensitive, but all confidentiality is destroyed. If more sensitive information were stored in the database, it would cause a huge security risk, since anyone can access it.
 					</li>
 					<li>Resolving this vulnerability is easy: rather than allowing access to all origins with the '*', determining which domains will actually need to access the database and only giving access to those ones will largely reduce the vulnerability.</li>
-				</ul>
+				</ul></li>
 		</ul>
 		<h3>Conclusion</h3>
 		<p>Currently, the "Where in the World" web application is riddled with security holes, creating many vulnerabilities within the server itself as well as vulnerabilities that are potential dangerous to clients using the server. Though a rather time consuming effort, by following the suggestions above, the security risks can be largely reduced.</p>
