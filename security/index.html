@@ -11,6 +11,7 @@
 		<h3>Methodology</h3>
 		<p>Testing was first done using the black-box method. The server itself was run on heroku's server and tested using the link given to me by Jeremy. I added data to the database using curl in the terminal, and tested querying of the database through a web browser (Chrome and Firefox). The server's code was then reviewed for any other potential security vulnerabilities that isn't apparent from a quick check of the code.</p>
 		<h3>Abstract of Findings</h3>
+		<p>As is true with many projects the first time around, the server has many security issues. One of the issues found allow the attacker to redirect users to other sites, possibly giving users viruses. Another issue allow attackers to fake their location to get data of other users from the database. In querying data, attackers are able to retrieve all the data in the database. Additionally, any attacker on any domain can access the server. Overall, there are not enough security measures taken to protect the server and any user data.</p>
 		<h3>Issues Found</h3>
 		<h3>Conclusion</h3>
 
