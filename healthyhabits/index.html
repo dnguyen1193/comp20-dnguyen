@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Healthy Habits</title>
+
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="icon" type="image/ico" href="favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href="stylesheet.css" rel="stylesheet">
+ 
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script>
+      window.onload = function(){
+
+        if(localStorage.length == 0){
+          window.location.replace("login_signup.html");
+          // window.location.replace("http://comp20-f2014-team4.herokuapp.com/login_signup.html");
+        } else {
+          var user_login = localStorage.getItem("login");
+          }
+         
+          $.get("/profile.json?login=" + user_login, function(data){
+              var dp = document.getElementsByClassName("profpic")[0];
+              dp.innerHTML = "<img alt='profile picture' src='" + data.image + "' class='img-circle'>";
+
+              var profinfo = document.getElementsByClassName("active")[0];
+              profinfo.innerHTML = ("<span id='user_subtitle'>" + data.login + "</span>" +
+                                     "<br> Total Points: " + data.points +
+                                     "<br> Total Matches Won: " + data.matches_won +
+                                     "<br> Gym Hours: " + data.gym_hr_total +
+                                     "<br> Meditation Hours: " + data.med_hr_total);
+
+            var weekly_stats = document.getElementById("weekly_stats");
+            weekly_stats.innerHTML = "Weekly Points: " + data.points_w +
+                                     "<br> Weekly Gym Hours: " + data.gym_hr_w +
+                                     "<br> Weekly Meditation Hours: " + data.med_hr_w;
+          }, "json");
+
+
+        goalpopulation();
+        var addgoal_button = document.getElementById("goal-submit");
+
+        addgoal_button.onclick = function(){
+              var goal = document.getElementById("new-goal").value;
+              console.log("goal to be inserted:" + goal);
+              var login = localStorage.getItem("login"); 
+
+
+              var xhr = new XMLHttpRequest();
+              var params = "login=" + login + "&goal=" + goal;
+              xhr.open("POST", "/addgoal", true);
+              xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+              xhr.send(params);
+              xhr.onreadystatechange = function(){
+                var goal_list = document.getElementById("goal_list");
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                      goal_list.innerHTML = goal_list.innerHTML + "<li>" + goal + "</li>";
+
+                }
+              };
+        };
+
+        partTwo();
+        
+      };
+
+//---------------------------------------------------------------------------------
+  var totalpts_caption = "Total points: ";
+  var score_caption = "This week's points: ";
+  var win_caption = "Matches won: ";
+
+    function partTwo(){ //init
+            
+        var username1 = localStorage.getItem("login");
+        var username2;
+
+        $.get("/profile.json?login=" + username1, function(data){
+            username2 = data.match;
+
+            if (data.match == ""){
+              placeholderCat();   //TODO
+            }
+
+            document.getElementById('user1').innerHTML = data.login;
+            document.getElementById('user2').innerHTML = data.match;
+            console.log("hi");
+            insertScores(data);
+          }, "json");
+
+}
+
+  // function placeholderCat()
+  // {
+  //   // document.getElementById('user1').innerHTML = data.login;
+  //   // document.getElementById('user2').innerHTML = "It looks like you don't have a match for this week. Come back next week!";
+  // }
+    function insertScores(userinfo) 
+    {
+      document.getElementById("score1").innerHTML = 
+          totalpts_caption + userinfo.points + "<br>" + 
+          score_caption + userinfo.points_w + "<br>" + 
+          win_caption + userinfo.matches_won;
+
+      var matchinfo;
+      $.get("/profile.json?login=" + userinfo.match, function(data){
+        matchinfo = data;
+
+        document.getElementById("score2").innerHTML = 
+          totalpts_caption + matchinfo.points + "<br>" + 
+          score_caption + matchinfo.points_w + "<br>" + 
+          win_caption + matchinfo.matches_won;
+
+        var pic1 = document.getElementsByClassName("pic1");
+        pic1[0].innerHTML = "<img src=" + userinfo.image + " alt=" + userinfo.login + " id='userpic' class='img-circle'>";
+        var pic2 = document.getElementsByClassName("pic2");
+        pic2[0].innerHTML = "<img src=" + matchinfo.image + " alt=" + matchinfo.login + " id='matchpic' class='img-circle'>";
+
+        var ratio1 = (userinfo.points_w / (userinfo.points_w + matchinfo.points_w)) * 100;
+        var ratio2 = (matchinfo.points_w / (userinfo.points_w + matchinfo.points_w)) * 100;
+
+        var success = document.getElementsByClassName("progress-bar progress-bar-success progress-bar-striped");
+        success[0].style.width = ratio1 + "%";
+        var warning = document.getElementsByClassName("progress-bar progress-bar-warning progress-bar-striped");
+        warning[0].style.width = ratio2 + "%";
+        console.log(matchinfo);
+      }, "json");
+
+        highscores();
+    }
+
+    function highscores()
+    {
+      var highscores;
+       $.get("/highscores.json", function(data){
+        highscores = data;
+
+
+        var hs_html = "";
+        for (var i = 0; i < highscores.length; i++) {
+          hs_html += "<tr> <td>" + highscores[i].login + "</td>" + "<td>" + highscores[i].points + "</td> </tr>";
+        }
+         document.getElementById("hs").innerHTML = hs_html;
+
+      }, "json");
+     }
+// ------------------------------------------------------------------------
+
+
+function goalpopulation() {
+  console.log("populating goals!");
+              var login = localStorage.getItem("login"); 
+              var goal_list = document.getElementById("goal_list");
+              goal_list.innerHTML = "";
+
+              $.get("/goals.json?login=" + login, function(data){
+                console.log("goal list!");
+                console.log(data);
+                for(i in data) {
+                  console.log("goal to add to list: " + data[i].goal)
+                  goal_list.innerHTML += ("<li>" + data[i].goal + "</li>");
+                }
+              }, "json");
+}
+
+  </script>
+  </head>
+  <body>
+
+
+
+
+    <div class= "topbar">
+      <div class= "container-fluid">
+      <span class= "topbar-group">
+        <div class="mobile-menu visible-xs visible-phone">
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            Menu <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/index.html">My Profile</a></li>
+              <li class="divider"></li>
+              <li><a href="/checkin.html">Log Workout</a></li>
+              <li><a href="/meditation1.html">Meditate</a></li>
+            </ul>
+          </div>
+        </div>
+        </span>
+        <a href="/index.html" ><img src = "images/logo.png" alt="Healthy Habits logo"/> </a>
+      </div>
+    </div>
+    <!--end of topbar -->
+
+    <div class="container">
+
+      <!-- <div class="row"> -->
+
+          <div class="col-md-2 visible-md visible-lg">
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class= "profpic"></div>
+                <ul class="nav">
+                  <li class="active"> </li>
+                  <br>
+                  <h4>EARN POINTS!</h4>
+                  <li><a href="checkin.html">Workout</a></li>
+                  <li><a href="meditation1.html">Meditate</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+  
+          <div class="col-md-7 col-s-12">
+          <div class="row">
+            <div class="profilebody">
+              <div class="profilebody-inner">
+                  <h2>CURRENT MATCHUP</h2>
+                  <div class="row">
+                    <div class="col-xs-6 col-md-6 pic1">
+                    </div>
+                    <div class="col-xs-6 col-md-6 pic2">
+                    </div>
+
+                    <!-- change usernames -->
+                    <div class="col-xs-6 col-md-6">
+                      <h3 id="user1"></h3>
+                      <p id="score1"></p>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                      <h3 id="user2"></h3>
+                      <p id="score2"></p>           
+                    </div>
+                  </div>
+
+                  <!-- progress bar -->
+                  <div "class col-lg-1"></div>
+                  <div "class col-lg-4">
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-success progress-bar-striped"></div>
+                      <div class="progress-bar progress-bar-warning progress-bar-striped"></div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                </div>
+
+                <!-- highscores table -->
+                <div class="col-12">
+                <div class="highscores-table">
+                  <h2>HIGH SCORES</h2>
+                  <table class="order-table table">
+                    <thead>
+                      <tr>
+                        <th>Username</th>
+                        <th>Points</th>
+                      </tr>
+                    </thead>
+                    <tbody id="hs">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              </div>
+ 
+
+          <div class="col-md-3 col-s-12">
+           <div class="weeklygoals">
+            <div class="weeklygoals-inner">
+              <h3> This week: </h3>
+              <div id="weekly_stats"></div>
+              <h3>Weekly Goals: </h3>
+              <ul id="goal_list">
+               
+              </ul>
+            </div>
+            <div class="weeklygoals-textfield">
+               <div class="input-group">
+                  <input id = "new-goal" type="text" class="form-control" placeholder="Add some new goals!">
+                    <span class="input-group-btn">
+                      <button id="goal-submit" class="btn btn-default" type="button">Submit</button>
+                    </span>
+               </div>
+            </div>
+          </div>  
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>
