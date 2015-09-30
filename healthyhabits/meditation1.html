@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content="utf-8" http-equiv="encoding">
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>Meditate | Healthy Habits</title>
+		<link rel="icon" type="image/ico" href="favicon.ico">
+    	<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    	<link href="stylesheet.css" rel="stylesheet">
+		<script src="Light-Table-Filter/light-table-filter.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<!--<script src="StackTable/stacktable.js"></script>-->
+		<!--<link href="StackTable/stacktable.css" rel="stylesheet">-->
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+		    <script>
+      window.onload = function(){
+
+        if(localStorage.length == 0){
+          window.location.replace("login_signup.html");
+          // window.location.replace("http://comp20-f2014-team4.herokuapp.com/login_signup.html");
+        } else {
+          var user_login = localStorage.getItem("login");
+          console.log("user_login: " + user_login);
+         
+          $.get("/profile.json?login=" + user_login, function(data){
+              var dp = document.getElementsByClassName("profpic")[0];
+              dp.innerHTML = "<img alt='profile picture' src='" + data.image + "' class='img-circle'>";
+
+              var profinfo = document.getElementsByClassName("active")[0];
+                    profinfo.innerHTML = ("<span id='user_subtitle'>" + data.login + "</span>" +
+                             "<br> Total Points: " + data.points +
+                             "<br> Total Matches Won: " + data.matches_won +
+                             "<br> Gym Hours: " + data.gym_hr_total +
+                             "<br> Meditation Hours: " + data.med_hr_total);
+          }, "json");
+
+        }
+
+        // goalpopulation();
+        // var addgoal_button = document.getElementById("goal-submit");
+
+        // addgoal_button.onclick = function(){
+        //       var goal = document.getElementById("new-goal").value;
+        //       console.log("goal to be inserted:" + goal);
+        //       var login = localStorage.getItem("login"); 
+
+
+        //       var xhr = new XMLHttpRequest();
+        //       var params = "login=" + login + "&goal=" + goal;
+        //       xhr.open("POST", "/addgoal", true);
+        //       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        //       xhr.send(params);
+        //       xhr.onreadystatechange = function(){
+        //         var goal_list = document.getElementById("goal_list");
+        //         if (xhr.readyState == 4 && xhr.status == 200) {
+        //               goal_list.innerHTML = goal_list.innerHTML + "<li>" + goal + "</li>";
+
+        //         }
+        //       };
+        // };
+
+        // partTwo();
+        
+      };
+
+//---------------------------------------------------------------------------------
+//   var totalpts_caption = "Total points: ";
+//   var score_caption = "This week's points: ";
+//   var win_caption = "Matches won: ";
+
+//     function partTwo(){ //init
+            
+//         var username1 = localStorage.getItem("login");
+//         var username2;
+
+//         $.get("/profile.json?login=" + username1, function(data){
+//             username2 = data.match;
+
+//             if (data.match == ""){
+//               placeholderCat();   //TODO
+//             }
+
+//             document.getElementById('user1').innerHTML = data.login;
+//             document.getElementById('user2').innerHTML = data.match;
+//             console.log("hi");
+//             insertScores(data);
+//           }, "json");
+
+// }
+
+//     function insertScores(userinfo) 
+//     {
+//       document.getElementById("score1").innerHTML = 
+//           totalpts_caption + userinfo.points + "<br>" + 
+//           score_caption + userinfo.points_w + "<br>" + 
+//           win_caption + userinfo.matches_won;
+
+//       var matchinfo;
+//       $.get("/profile.json?login=" + userinfo.match, function(data){
+//         matchinfo = data;
+
+//         document.getElementById("score2").innerHTML = 
+//           totalpts_caption + matchinfo.points + "<br>" + 
+//           score_caption + matchinfo.points_w + "<br>" + 
+//           win_caption + matchinfo.matches_won;
+
+//         var pic1 = document.getElementsByClassName("pic1");
+//         pic1[0].innerHTML = "<img src=" + userinfo.image + " alt=" + userinfo.login + " id='userpic' class='img-circle'>";
+//         var pic2 = document.getElementsByClassName("pic2");
+//         pic2[0].innerHTML = "<img src=" + matchinfo.image + " alt=" + matchinfo.login + " id='matchpic' class='img-circle'>";
+
+//         var ratio1 = (userinfo.points_w / (userinfo.points_w + matchinfo.points_w)) * 100;
+//         var ratio2 = (matchinfo.points_w / (userinfo.points_w + matchinfo.points_w)) * 100;
+
+//         var success = document.getElementsByClassName("progress-bar progress-bar-success progress-bar-striped");
+//         success[0].style.width = ratio1 + "%";
+//         var warning = document.getElementsByClassName("progress-bar progress-bar-warning progress-bar-striped");
+//         warning[0].style.width = ratio2 + "%";
+//         console.log(matchinfo);
+//       }, "json");
+
+//         highscores();
+//     }
+
+//     function highscores()
+//     {
+//       var highscores;
+//        $.get("/highscores.json", function(data){
+//         highscores = data;
+
+
+//         var hs_html = "";
+//         for (var i = 0; i < highscores.length; i++) {
+//           hs_html += "<tr> <td>" + highscores[i].login + "</td>" + "<td>" + highscores[i].points + "</td> </tr>";
+//         }
+//          document.getElementById("hs").innerHTML = hs_html;
+
+//       }, "json");
+//      }
+// ------------------------------------------------------------------------
+
+
+// function goalpopulation() {
+//   console.log("populating goals!");
+//               var login = localStorage.getItem("login"); 
+//               var goal_list = document.getElementById("goal_list");
+//               goal_list.innerHTML = "";
+
+//               $.get("/goals.json?login=" + login, function(data){
+//                 console.log("goal list!");
+//                 console.log(data);
+//                 for(i in data) {
+//                   console.log("goal to add to list: " + data[i].goal)
+//                   goal_list.innerHTML += ("<li>" + data[i].goal + "</li>");
+//                 }
+//               }, "json");
+// }
+
+  </script>
+
+	</head>
+
+	<body>
+		<div class= "topbar">
+      		<div class= "container-fluid">
+        <a href="/index.html" ><img src = "images/logo.png" alt="Healthy Habits logo"/> </a>
+      		</div>
+    	</div>
+    	<!--end of topbar -->
+
+   		<div class="container">
+			<div class="row">
+          	<div class="col-md-2 visible-md visible-lg">
+          	<div class="navbar">
+            <div class="navbar-inner">
+                <div class= "profpic"></div>
+                	<ul class="nav">
+                  		<li class="active"> </li>
+                  		<li><a href="checkin.html">Workout</a></li>
+                  		<li><a href="meditation1.html">Meditate</a></li>
+               		</ul>
+            </div>
+            </div>
+          	</div>
+          		<div class="col-md-10">
+            	<div class="profilebody">
+              	<div class="profilebody-inner">
+				<section class="container-fluid">
+				<h2>How Long Do You Want to Meditate for Today?</h2>
+
+				<input type="search" class="light-table-filter" data-table="order-table" placeholder="Filter">
+
+				<table class="order-table table" id="medi_table">
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>Approximate Time</th>
+							<th>Source</th>
+							<th>Guided Meditation?</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- 5 MINUTE VIDEOS -->
+						<tr>
+							<td>
+								 <!-- Button trigger modal -->
+
+
+								<a data-toggle="modal" href="#5minvid" class="btn btn-default btn-sm">Zen Hypnosis</a>
+
+								<!-- Modal -->
+								<div class="modal fade" id="5minvid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-body">
+												<iframe width="420" height="315" src="http://www.youtube.com/embed/ESiZWwcr5lU?html5=1" frameborder="0" allowfullscreen></iframe>
+											</div>
+											<div class="modal-footer">
+								    			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											</div>
+								    	</div>
+								    </div>
+								</div>
+							</td>
+							<td>5 Minutes</td>
+							<td>Mark Abadi</td>
+							<td>Yes</td>
+						</tr>
+
+						<!-- 10 MINUTE VIDEOS -->
+						<tr>
+							<td>
+								<!-- Button trigger modal -->
+								<a data-toggle="modal" href="#10minvid" class="btn btn-default btn-sm">Deep Relaxation</a>
+								<!-- Modal -->
+								<div class="modal fade" id="10minvid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-body">
+												<iframe width="420" height="315" src="http://www.youtube.com/embed/X7iBnp8T6nY?html5=1" frameborder="0" allowfullscreen></iframe>
+											</div>
+											<div class="modal-footer">
+								    			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											</div>
+								    	</div>
+								    </div>
+								</div>
+							</td>
+							<td>10 Minutes</td>
+							<td>TheHonestGuys</td>
+							<td>Yes</td>
+						</tr>
+						
+						<!-- 15 MINUTE VIDEOS -->
+						<tr>
+							<td>
+								<!-- Button trigger modal -->
+								<a data-toggle="modal" href="#15minvid" class="btn btn-default btn-sm">Blissful Deep Relaxation</a>
+								<!-- Modal -->
+								<div class="modal fade" id="15minvid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-body">
+												<iframe width="420" height="315" src="http://www.youtube.com/embed/Jyy0ra2WcQQ?html5=1" frameborder="0" allowfullscreen></iframe>
+											</div>
+											<div class="modal-footer">
+								    			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											</div>
+								    	</div>
+								    </div>
+								</div>
+							</td>
+							<td>15 Minutes</td>
+							<td>TheHonestGuys</td>
+							<td>Yes</td>
+						</tr>
+						
+						<!-- 30 MINUTE VIDEOS -->
+						<tr>
+							<td>
+								<!-- Button trigger modal -->
+								<a data-toggle="modal" href="#30minvid" class="btn btn-default btn-sm">Ocean Waves</a>
+								<!-- Modal -->
+								<div class="modal fade" id="30minvid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-body">
+												<iframe width="420" height="315" src="http://www.youtube.com/embed/0GbQN1xBAWw?html5=1" frameborder="0" allowfullscreen></iframe>
+											</div>
+											<div class="modal-footer">
+								    			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											</div>
+								    	</div>
+								    </div>
+								</div>
+							</td>
+							<td>30 Minutes</td>
+							<td>TheHonestGuys</td>
+							<td>Yes</td>
+						</tr>
+						
+						<!-- 60 MINUTE + VIDEOS -->
+						<tr>
+							<td>
+								<!-- Button trigger modal -->
+								<a data-toggle="modal" href="#60minupvid" class="btn btn-default btn-sm">The Healing Temple</a>
+								<!-- Modal -->
+								<div class="modal fade" id="60minupvid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-body">
+												<iframe width="420" height="315" src="http://www.youtube.com/embed/hyg3abur5VI?html5=1" frameborder="0" allowfullscreen></iframe>
+											</div>
+											<div class="modal-footer">
+								    			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											</div>
+								    	</div>
+								    </div>
+								</div>
+							</td>
+							<td>60 Minutes and Up</td>
+							<td>TheHonestGuys</td>
+							<td>Yes</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+		    </div>
+            </div>
+        	</div>
+    		</div>
+
+    	</div>
+    	<br>
+
+		<script>
+			var login;
+			var request = new XMLHttpRequest();
+			var date = new Date();
+			var pointsEarned = 0;
+			var medHours = 0;
+			LightTableFilter.init();
+
+		  	$(document).ready(function(){
+				  autoPlayYouTubeModal();
+				});
+		 	//FUNCTION TO GET AND AUTO PLAY YOUTUBE VIDEO FROM DATATAG
+		  	function autoPlayYouTubeModal() {
+			    var trigger = $("body").find('[data-toggle="modal"]');
+			    trigger.click(function () {
+				        var theModal = $(this).data("target"),
+				        videoSRC = $(this).attr("data-theVideo"),
+				        videoSRCauto = videoSRC + "?autoplay=1";
+				        $(theModal + ' iframe').attr('src', videoSRCauto);
+				        $(theModal + ' button.close').click(function () {
+				        $(theModal + ' iframe').attr('src', videoSRC);
+			    	});
+			    });
+		  	}
+
+
+		  	$("#5minvid").on("click", function (e) {
+		  		console.log("watching the video!!");
+		  		if (e) {
+		  			pointsEarned = 10;
+	    			medHours = 5/60.;
+	    			sendData();
+		  		}
+			});
+
+			$("#10minvid").on("click", function (e) {
+				if (e) {
+	    			pointsEarned = 20;
+	    			medHours = 10/60.;
+	    			sendData();
+    			}
+			});
+
+			$("#15minvid").on("click", function (e) {
+				if (e) {
+					pointsEarned = 30;
+    				medHours = 15/60.;
+    				sendData();
+				}
+			});
+
+			$("#30minvid").on("click", function (e) {
+				if (e) {
+					pointsEarned = 60;
+    				medHours = 30/60.;
+    				sendData();
+				}
+			});
+
+			$("#60minupvid").on("click", function (e) {
+				if (e) {
+					pointsEarned = 120;
+    				medHours = 60/60;
+    				sendData();
+				}
+			});
+
+		  	function sendData() {
+		  		login = localStorage.getItem("login");
+		  		request.open("post", "/update");
+		  		request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        		request.send("login=" + login + "&points=" + pointsEarned + "&med_hr=" + medHours);
+		  	}
+		  	
+		</script>
+	</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+ 
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="icon" type="image/ico" href="favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href="stylesheet.css" rel="stylesheet">
+ 
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script>
+      window.onload = function(){ 
+        var user_login;
+        var user_pwd;
+        var params;
+        var request = new XMLHttpRequest();
+        var signup_button = document.getElementById("signup-submit");
+        var login_button = document.getElementById("login-submit");
+
+        signup_button.onclick = function(){
+          user_login = document.getElementById("new-username").value;
+          user_pwd   = document.getElementById("new-password").value;
+          var user_email = document.getElementById("new-email").value;
+          var user_img   = "";
+          user_img = document.getElementById("new-img").value;
+
+          params = ("login=" + user_login +"&password=" + user_pwd + "&email=" + user_email);
+          if(user_img != ""){
+            params += ("&image=" + user_img); 
+          }
+
+          request.open("post", "/createAccount", true);
+
+          // request.open("post", "http://comp20-f2014-team4.herokuapp.com/createAccount", true);
+          request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          request.send(params);
+
+          localStorage.setItem("login", user_login);
+          window.location.replace("/");
+          // window.location.replace("http://comp20-f2014-team4.herokuapp.com/");
+
+        };
+
+        login_button.onclick = function(){
+          user_login = document.getElementById("existing-username").value;
+          localStorage.setItem("login", user_login);
+                    window.location.replace("/");
+// window.location.replace("http://comp20-f2014-team4.herokuapp.com/");
+
+        };
+      };
+
+      
+
+      
+    </script>
+
+  </head>
+  <body>
+
+    <div class= "topbar">
+      <div class= "container-fluid">
+        <h1>Healthy Habits</h1>
+      </div>
+    </div>
+    <!--end of topbar -->
+
+    <div class="container">
+
+      <div class="row">
+
+          <div class="col-md-2">
+            <!-- placeholder -->
+          </div>
+
+          <div class="col-md-4">
+             <div class="signupbox">
+              <div class="signupbox-inner">
+                <h3> Sign Up </h3>
+                <br>
+                <div class="input-group">
+                  <span class="input-group-addon">Username</span>
+                  <input id = "new-username" type="text" class="form-control" placeholder="username">
+                </div>
+                <br>
+                <div class="input-group">
+                  <span class="input-group-addon">E-mail</span>
+                    <input id="new-email" type="text" class="form-control" placeholder="yourname@example.com">
+                </div>
+                <br>
+                <div class="input-group">
+                  <span class="input-group-addon">Password</span>
+                    <input id="new-password" type="password" class="form-control" placeholder="$ecret$">
+                </div>
+                <br>
+                <div class="input-group">
+                  <span class="input-group-addon">Profile Picture</span>
+                  <input id = "new-img" type="text" class="form-control" placeholder="Send us nudes">
+                </div>
+                <br>
+                  <button id = "signup-submit" type="button" class="btn btn-default">Submit</button>
+                <br>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="loginbox">
+              <div class="loginbox-inner">
+                <h3> Log In </h3>
+                <br>
+                  <div class="input-group">
+                    <span class="input-group-addon">Username</span>
+                    <input id="existing-username" type="text" class="form-control" placeholder="username">
+                  </div>
+                <br>
+                <div class="input-group">
+                  <span class="input-group-addon">Password</span>
+                  <input id="existing-pwd" type="password" class="form-control" placeholder="$ecret$">
+                </div>
+                 <br>
+                  <button id = "login-submit" type="button" class="btn btn-default">Submit</button>
+                <br>
+              </div>
+            </div>
+          </div>
+
+          </div>
+
+      </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

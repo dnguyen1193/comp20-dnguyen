@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Healthy Habits</title>
+
+        <!-- Bootstrap -->
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+        <link rel="icon" type="image/ico" href="favicon.ico">
+        <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true&amp;libraries=places"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="checkin.css" />
+        <link href="stylesheet.css" rel="stylesheet">
+
+     
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script>
+            window.onload = function(){
+                if(localStorage.length == 0){
+                  window.location.replace("login_signup.html");
+                  // window.location.replace("http://comp20-f2014-team4.herokuapp.com/login_signup.html");
+                } 
+                else {
+                    var user_login = localStorage.getItem("login");
+                 
+                    $.get("/profile.json?login=" + user_login, function(data){
+                        var dp = document.getElementsByClassName("profpic")[0];
+                        dp.innerHTML = "<img alt='profile picture' src='" + data.image + "' class='img-circle'>";
+
+                        var profinfo = document.getElementsByClassName("active")[0];
+                        profinfo.innerHTML = ("<span id='user_subtitle'>" + data.login + "</span>" +
+                                     "<br> Total Points: " + data.points +
+                                     "<br> Total Matches Won: " + data.matches_won +
+                                     "<br> Gym Hours: " + data.gym_hr_total +
+                                     "<br> Meditation Hours: " + data.med_hr_total);
+                      }, "json");
+                }
+            };
+
+    // ------------------------------------------------------------------------
+                var myLat = 0;
+                var myLng = 0;
+                var request = new XMLHttpRequest();
+                var me = new google.maps.LatLng(myLat, myLng);
+                var myOptions = {
+                    zoom: 13, // The larger the zoom number, the bigger the zoom
+                    center: me,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var map;
+                var marker;
+                var places;
+                var infowindow = new google.maps.InfoWindow();
+
+                function getMyLocation() {
+                    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+                    map.panTo(me);
+                    if (navigator.geolocation) { 
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            myLat = position.coords.latitude;
+                            myLng = position.coords.longitude;
+                            renderMap();
+                        });
+                    }
+                    else {
+                        alert("Geolocation is not supported by your web browser.  What a shame!");
+                    }
+                }
+
+                function renderMap(){
+                    me = new google.maps.LatLng(myLat, myLng);
+                    map.panTo(me);
+
+                    // var icon = { 
+                    //          url: "images/staricon.png"
+                    //      };
+                    marker = new google.maps.Marker({
+                        position: me,
+                        icon: "images/markeblue.png"
+                    });
+
+                    marker.setMap(map);
+
+                    request = {
+                        location: me,
+                        radius: '1500',
+                        types: ['gym']
+                    };
+
+                    service = new google.maps.places.PlacesService(map);
+                    service.search(request, callback);
+                }
+
+                function callback(results, status)  {
+                    if (status == google.maps.places.PlacesServiceStatus.OK) {
+                        for (var i = 0; i < results.length; i++) {
+                            createMarker(results[i]);
+                        }       
+                    }
+                }
+
+                function createMarker(place){
+                    var placeLoc = place.geometry.location;
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: place.geometry.location
+                    });
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infowindow.close();
+                        infowindow.setContent(place.name);
+                        infowindow.open(map, this);
+                    });
+                }
+                    
+            $("#checkIn").click(function () {
+                var btn = $(this);
+                btn.button('complete');
+                checkIn();
+            });
+            $("#checkOut").click(function () {
+                var btn = $(this);
+                btn.button('complete');
+                checkOut();
+            });
+            function checkIn(){
+                var d = new Date();
+                var checkIn = d.getTime();
+                localStorage.setItem("checkInTime", checkIn);
+            }
+            function checkOut(){
+                var request = new XMLHttpRequest();
+                var d = new Date();
+                var checkOut = d.getTime();
+                var checkIn = localStorage.getItem("checkInTime");
+                var time = checkOut - checkIn;
+                time = time/3600000.;
+                var pointsEarned = (int)(time * 120);
+                var login = localStorage.getItem("login");
+                request.open("post", "/update");
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                request.send("login=" + login + "&points=" + pointsEarned + "gym_hr=" + time);
+            };
+        </script>
+
+    </head>
+  <body onload="getMyLocation()">
+
+    <div class= "topbar">
+      <div class= "container-fluid">
+        <a href="/index.html" ><img src = "images/logo.png" alt="Healthy Habits logo"/> </a>
+      </div>
+    </div>
+    <!--end of topbar -->
+
+    <div class="container">
+
+      <!-- <div class="row"> -->
+
+          <div class="col-md-2 visible-md visible-lg">
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class= "profpic"></div>
+                <ul class="nav">
+                  <li class="active"> </li>
+                  <li><a href="checkin2.html">Workout</a></li>
+                  <li><a href="meditation1.html">Meditate</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+  
+        <div class="col-md-10">
+            <div class= "profilebody">
+                <div class="profilebody-inner">
+                    <h2>Just Do It! - Log Your Gym Time</h2>
+                    <div class="mapcontainer">
+                        <div id="map_canvas"></div>
+                    </div>
+                    <div class="buttoncontainer">
+                        <button id="checkIn" data-complete-text="You've Checked In!" class="btn btn-info">Check-in to Gym!</button>
+                        <button id="checkOut" data-complete-text="You've Checked Out!" class="btn btn-danger">Check-out of Gym!</button>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+
+    </div>
+
+
+<script>
+
+
+</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>
